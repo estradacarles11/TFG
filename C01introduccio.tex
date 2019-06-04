@@ -1,0 +1,81 @@
+\chapter{Introducció}\label{ch:introduccio}
+
+%En aquest capítol es descriu els objectius del projecte i la estructura utilitzada en el dessenvolupament del mateix.
+
+%Durant aquesta part es descriuen els objectius a assolir per tal d'una relització satisfactòria del projecte.
+
+%Una vegada especificats aquests requisits es passarà a detallar l'estructura utilitzada en el desenvolupament del projecte.
+
+
+
+
+
+
+\section{Marc del projecte}\label{sec:marc_del_projecte}
+
+%Done Enmarques on ets CNM IMB grup ICAS
+
+%una linea de bla de la tecno permet automatitzar pim pim pim.
+
+%necessitats. realitzar un sistema de mesures per caracteristiques electriques de uns dispo.. 
+
+%Aparteix la màquina de elongació controlat per automatitzar les messures... 
+
+%El projecte s'enmarca en el disseny del sistema de control ....
+
+Aquest treball ha estat realitzat al grup \ac{ICAS} de l'\ac{IMB} - \ac{CNM} sota la tutela del \pfcsupervisor. L'\ac{IMB} - \ac{CNM} és un institut d’investigació del \ac{CSIC} destinat en un principi al disseny microelectrònic però que ha anat guanyant pes en altres disciplines per a convertir-se al que és avui en dia: un espai de recerca multidisciplinari amb especial interès per la micro i nanotecnologia. Es troba en el Campus de la \ac{UAB} fet que li permet estar en contacte directe amb investigadors de la universitat.
+
+El grup \ac{ICAS} s'especialitza en el disseny i testeig de sistemes i circuits integrats \ac{CMOS} per aplicacions analògiques, digitals i de radiofreqüència. 
+
+Un dels projectes que s'estan desenvolupant en aquest grup de recerca consisteix en un espectrofotòmetre destinat a detectar la presència de productes tòxics en aigua \textit{in situ} sense dependre d'un laboratori especialitzat. Va ser iniciat per la Nidia Santamaria i pel Xavier Muñoz \cite{sanahuja:2015,pujol:2016} l'any 2014 i, més endavant, el Sirio Beneitez \cite{sirio:2015} es va fer càrrec d'implementar nombrosos aspectes del projecte. Tot i així, encara queda una bona part d'afinament del sistema per aconseguir el funcionament esperat d'aquest detector tal com ho mostra la present memòria.
+
+\section{Objectius del projecte}\label{sec:objectius_del_projecte}
+
+S'han detectat una sèrie de punts per millorar que permetrien afinar l'espectrofotòmetre i assegurar-ne el correcte funcionament \cite{carles:2017}:
+
+\begin{itemize}
+	\item{\textbf{Millora del rang dinàmic: }}Es va considerar que calia actuar principalment en dos punts del circuit per aconseguir millorar el rang dinàmic i augmentar la precisió del senyal. El \ac{ADC} de l'\textit{Arduino DUE} assigna un valor de \num{12} bits\footnote{Un valor de \num{12} bits pot anat de \numrange[range-phrase = \ a\ ]{0}{4095} i ocupa \num{2} bytes de memòria.} a la senyal que li arriba del circuit. Això implica que es necessiten eines per calibrar els paràmetres dels experiments perquè el rang dinàmic de la senyal s'ajusti a al rang del \ac{ADC}:
+	
+	\begin{itemize}
+		
+		\item{Rectificador}
+		
+		El rectificador és un element molt important del detector d'envolupant, un circuit que tradueix una senyal sinusoïdal a una contínua. Consisteix bàsicament d'un díode connectat a un circuit \acsu{RC}. El problema que tenen la majoria d'aquests circuits és que el valor del senyal continu resultant és més baix que el valor dels pics del sinus degut a la caiguda de tensió en el díode i està associat a la seva \acsu{VT} (tensió llindar). És per això que es va considerar adient aprofitar un amplificador operacional (\acsu{OPAMP}) per transformar el díode en un super-díode amb $ \ac{VT} = \SI{0}{\volt} $. Aquesta modificació que introduir millora del rang dinàmic del \SI{18}{\percent}.
+		
+		\item{Guany variable a la sortida de l'amplificador de transimpedància (\acsu{TIA})}
+		
+		El senyal sinusoïdal que surt del \ac{TIA}\footnote{En aquest circuit s'utilitza un fotodíode per detectar la senyal lumínica. Aquests dispositius donen una senyal en corrent elèctric però la resta del circuit de processat treballa en tensió ja que és el que pot detectar el \ac{ADC} de l'\hyperref[subsec:arduino]{\textit{Arduino}}. Per tant cal un \ac{TIA} capaç de transformar un senyal de corrent a tensió.} no s'ajustava al rang dinàmic dels \ac{OPAMP}s responsables del filtratge de la senyal anteriors al rectificador. Aquest fet provoca una pèrdua massiva del rang dinàmic i per solucionar-ho es proposa co\lgem ocar un circuit multiplicador controlat digitalment per l'\hyperref[subsec:arduino]{\textit{Arduino}} just a la sortida del \ac{TIA}.
+		
+	\end{itemize}
+	
+	\item{\textbf{Migració i actualització del programari de control: }}Originalment, el sistema estava controlat digitalment per un programa que no incloïa el paràmetre del guany variable introduït durant aquest projecte. Calia doncs actualitzar-lo. També es va considerar adient reescriure'l en \textit{Python \num{2.7}} per fer-lo multiplataforma i ampliar-ne les capacitats de postprocessament.
+	
+	\item{\textbf{Creació d'una \ac{PCB}: }}Un cop comprovat que tots els elements anteriors funcionen correctament, és necessari passar tots els components a un circuit imprès que n'assegurarà una millor estabilitat i fiabilitat.
+		
+\end{itemize}
+
+
+\section{Contigut de la memòria}\label{sec:contingut_de_la_memoria}
+
+La present memòria es desglossa en un total de quatre capítols que descriuen tant la part tècnica com la implementació i resultats:
+
+\begin{enumerate}
+	\item{Introducció al treball:}
+	
+	Aquest primer capítol és de caràcter introductori i descriu els objectius i continguts del projecte.
+	
+	\item{Conceptes previs:}
+	
+	Durant el desenvolupament d'aquest capítol s'expliquen alguns conceptes i components que seran utilitzats durant la fase de implementació.
+	
+	Tot el que queda explicat a l'apartat de conceptes previs ha estat implementat al dispositiu i, per tant, és necessari tenir presents aquests conceptes en capítols posteriors.
+	
+	\item{Desenvolupament:}
+	
+	Serà el capítol principal en el qual s'expliquen els diferents components del sistema, juntament amb què s'ha dissenyat i implementat per tal d'afinar el comportament del dispositiu.
+	
+	\item{Conclusions i línies de futur:}
+	
+	Capítol final que resumeix de forma global el projecte i presenta possibles línies de futur que es traduiran en una major eficiència a l'hora de fer servir el dispositiu.
+	
+\end{enumerate}

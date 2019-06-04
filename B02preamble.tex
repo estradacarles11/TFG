@@ -1,0 +1,72 @@
+% icasthesis-template.tex
+%     A LaTeX Template for the ICAS Thesis Class
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Revisions
+%    v 0.0  22/01/2013  First release
+%      0.1  29/01/2013  B5 paper and cover rearrangement
+%      0.2  30/10/2013  Custom bibliography style
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Preamble
+
+\usepackage{ragged2e}
+\usepackage{float}
+\usepackage[version=4]{mhchem}
+\usepackage{aliascnt}
+\newaliascnt{eqfloat}{equation}
+\newfloat{eqfloat}{ht}{eqflts}
+\floatname{eqfloat}{Equation}
+
+\newcommand*{\ORGeqfloat}{}
+\let\ORGeqfloat\eqfloat
+\def\eqfloat{%
+	\let\ORIGINALcaption\caption
+	\def\caption{%
+		\addtocounter{equation}{-1}%
+		\ORIGINALcaption
+	}%
+	\ORGeqfloat
+}
+
+\usepackage{siunitx}
+\sisetup{
+	output-decimal-marker={,}	% just uncomment if you want to use comma as the decimal marker!
+}
+
+\usepackage{breqn}
+\usepackage{array}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}m{#1}}
+
+\title{\pfctitle} 
+\author{\pfcauthor}
+
+\degree{\pfcdegree}
+\department{\pfcdepartment}
+\university{\pfcuniversity}
+\universitylogo{\includegraphics[width=0.5\textwidth]{Logos/uab-logo}}
+\tutor{}
+\tutorposition{}
+\supervisor{\pfcsupervisor}
+\supervisorposition{\pfcsupervisorposition}
+\supervisortwo{}
+\supervisortwoposition{}
+\institute{\pfcinstitute}
+\institutelogo{\includegraphics[width=0.4\textwidth]{Logos/cnm-logo}}
+\date{\pfcdate}
+
+%\dedication{}
+
+\abstractbilingual{La memòria planteja millorar el funcionament d'un espectrofotòmetre portàtil destinat a la detecció genèrica d'agents contaminants en aigua subterrània, com ara nitrats producte de la fertilització excessiva o de la inadequada disposició d'aigües residuals. 
+	
+Algunes d'questes millores són un dispositiu per controlar el guany del sistema i l'afinament del detector d'envolupant per evitar pèrdues innecessàries en la precisió final. També s'ha dissenyat i fabricat una \acs{PCB} que inclou totes les millores acumulades en les últimes etapes del projecte. Finalment, s'ha desenvolupat un software per controlar l'espectrofotòmetre des d'un ordinador similar al que ja existia, però incorporant la funcionalitat del control de guany, i millorant la interfície gràfica i la reco\lgem ecció de dades.}%
+{This memoir aims to improve a portable spectrophotometer designed to generically detect contamination in groundwater, such as nitrates product of excessive fertilization or improper disposal of sewage. 
+	
+Some of this improvements are a system gain controlling device and a modification of the peak detector to reduce unnecessary signal loss and to improve the overall precision. A \acs{PCB} has also been designed and manufactured with all the accumulated improvements of the last stages of this project. Finally, a new software has been developed to control the spectrophotometer from a computer, similar to the previous one but with added functionality, like the gain control, and improvements to the graphic interface and to the data collection.}
+
+\acknowledgments{Vull agrair al meu tutor Jordi Sacristán l'oportunitat de introduir-me en un projecte de desenvolupament de producte com aquest, ja que m'ha donat moltes eines de cara al futur i m'ha ensenyat a encarar d'una altra manera els problemes, juntament amb la paciència que ha tingut en les moltes estones que ha dedicat a ensenyar-me tots aquells conceptes necessaris per entendre la correcta explicació dels aspectes de l'electrònica que fins fa ben poc m'eren desconeguts.
+
+Gràcies també al \acs{IMB}-\acs{CNM} pertanyent al \acs{CSIC} per deixar-me treballar en les seves insta\lgem acions, al grup \acs{ICAS} per cedir-me part del seu laboratori, i a la \acs{UAB} per haver-me proporcionat els coneixements necessaris per encarar exitosament aquest projecte.
+{\flushright\includegraphics[width=0.2\textwidth]{Logos/icas-logo}\\}}
+
+\acronymsfile{Bibliography/acronyms.tex}
+
+\setPDFmetadata
